@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+const API = import.meta.env.VITE_API_URL;
 
 const CreateBoard = ({ onBoardCreated }) => {
   const [title, setTitle] = useState('');
@@ -9,7 +10,7 @@ const CreateBoard = ({ onBoardCreated }) => {
     if (!title.trim()) return;
 
     try {
-      await axios.post('http://localhost:5000/api/boards', { title });
+      await axios.post(`${API}/api/boards`, { title });
       setTitle('');
       onBoardCreated();
     } catch (err) {

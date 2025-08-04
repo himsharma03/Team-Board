@@ -6,9 +6,11 @@ const BoardList = ({ onBoardSelect, refreshTrigger, onBoardDeleted }) => {
   const [editingBoard, setEditingBoard] = useState(null);
   const [editTitle, setEditTitle] = useState('');
 
+  const API = import.meta.env.VITE_API_URL;
+
   const fetchBoards = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/boards');
+      const res = await axios.get(`${API}/api/boards`);
       setBoards(res.data);
     } catch (err) {
       console.error('Error fetching boards:', err);
@@ -19,15 +21,14 @@ const BoardList = ({ onBoardSelect, refreshTrigger, onBoardDeleted }) => {
     fetchBoards();
   }, [refreshTrigger]);
 
- const handleDelete = async (id) => {
+  const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/boards/${id}`);
+      await axios.delete(`${API}/api/boards/${id}`);
       fetchBoards();
 
       if (onBoardDeleted) {
         onBoardDeleted(id);
       }
-
     } catch (err) {
       console.error('Error deleting board:', err);
     }
@@ -41,7 +42,7 @@ const BoardList = ({ onBoardSelect, refreshTrigger, onBoardDeleted }) => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/boards/${editingBoard}`, { title: editTitle });
+      await axios.put(`${API}/api/boards/${editingBoard}`, { title: editTitle });
       setEditingBoard(null);
       fetchBoards();
     } catch (err) {
