@@ -14,6 +14,11 @@ const taskSchema = new mongoose.Schema({
     type: String, 
     default: '', 
   },
+   status: {
+    type: String,
+    enum: ['todo', 'in-progress', 'done'],
+    default: 'todo',
+  },
 });
 
 module.exports = mongoose.model('Task', taskSchema);

@@ -1,62 +1,53 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import BoardList from '../component/BoardList';
 import CreateBoard from '../component/CreateBoard';
-import TaskList from '../component/TaskList';
 import CreateTask from '../component/CreateTask';
+import TaskBoard from '../component/TaskBoard';
 
 const Home = () => {
   const [selectedBoard, setSelectedBoard] = useState(null);
-  const [refreshBoard, setRefreshBoard] = useState(false);
-  const [refreshTask, setRefreshTask] = useState(false);
+  const [refresh, setRefresh] = useState(Date.now());
 
-  const handleBoardCreated = () => {
-    setRefreshBoard(!refreshBoard);
-  };
-
-  const handleTaskCreated = () => {
-    setRefreshTask(prev => !prev);
-  };
-
-  const handleBoardDeleted = (deletedBoardId) => {
-  setRefreshBoard(prev => !prev); 
-  if (selectedBoard && selectedBoard._id === deletedBoardId) {
-    setSelectedBoard(null); 
-  }
-};
-
+  const triggerRefresh = () => setRefresh(Date.now());
 
   return (
     <div className="flex h-screen">
-      <div className="w-64 p-4 bg-gray-100 shadow-md border-r border-gray-300">
-        <div className="mt-10">
-          <BoardList
-  onBoardSelect={setSelectedBoard}
-  refreshTrigger={refreshBoard}
-  onBoardDeleted={handleBoardDeleted} 
-/>
-        </div>
+  
+      <div className="w-[280px] bg-white p-4 overflow-y-auto">
+        <h1 className="text-2xl font-bold mb-4 text-black">Boards</h1>
+        <CreateBoard onBoardCreated={triggerRefresh} />
+        <BoardList
+          onBoardSelect={(board) => {
+            setSelectedBoard(board);
+            triggerRefresh();
+          }}
+          refreshTrigger={refresh}
+          onBoardDeleted={(deletedId) => {
+            if (selectedBoard?._id === deletedId) setSelectedBoard(null);
+            triggerRefresh();
+          }}
+        />
       </div>
 
-      <div className="flex-1 p-6 overflow-y-auto bg-white">
+     
+      <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
         {selectedBoard ? (
-          <div>
-            <button
-              className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              onClick={() => setSelectedBoard(null)} 
-            >
-              Go Back to Create Board
-            </button>
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-              {selectedBoard.title}
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-red-500">
+               {selectedBoard.title}
             </h2>
-            <CreateTask boardId={selectedBoard._id} onTaskCreated={handleTaskCreated} />
-            <div className="mt-6">
-              <TaskList boardId={selectedBoard._id} key={refreshTask} />
-            </div>
+            <CreateTask
+              boardId={selectedBoard._id}
+              onTaskCreated={triggerRefresh}
+            />
+            <TaskBoard
+              boardId={selectedBoard._id}
+              refreshTask={refresh}
+            />
           </div>
         ) : (
-          <div className="mt-6">
-            <CreateBoard onBoardCreated={handleBoardCreated} />
+          <div className="text-gray-500 text-lg text-center mt-20">
+            Select a board to view tasks
           </div>
         )}
       </div>

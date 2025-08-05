@@ -8,6 +8,10 @@ const BoardList = ({ onBoardSelect, refreshTrigger, onBoardDeleted }) => {
 
   const API = import.meta.env.VITE_API_URL;
 
+  if (!API) {
+  console.error('VITE_API_URL is not set in .env');
+}
+
   const fetchBoards = async () => {
     try {
       const res = await axios.get(`${API}/api/boards`);
@@ -16,6 +20,8 @@ const BoardList = ({ onBoardSelect, refreshTrigger, onBoardDeleted }) => {
       console.error('Error fetching boards:', err);
     }
   };
+
+
 
   useEffect(() => {
     fetchBoards();
@@ -52,7 +58,7 @@ const BoardList = ({ onBoardSelect, refreshTrigger, onBoardDeleted }) => {
 
   return (
     <div className="mb-6">
-      <h2 className="text-[30px] text-blue-500 mb-4">Boards</h2>
+      
       <ul className="space-y-2">
         {boards.map((board) => (
           <li key={board._id} className="bg-gray-100 p-2 rounded relative">
@@ -63,7 +69,7 @@ const BoardList = ({ onBoardSelect, refreshTrigger, onBoardDeleted }) => {
                   onChange={(e) => setEditTitle(e.target.value)}
                   className="border px-2 py-1 rounded w-full"
                 />
-                <button type="submit" className="bg-green-500 text-white px-2 rounded">Save</button>
+                <button type="submit" className="bg-red-200 hover:bg-red-500 text-white px-2 py-1 rounded">Save</button>
                 <button onClick={() => setEditingBoard(null)} className="bg-gray-300 px-2 rounded">Cancel</button>
               </form>
             ) : (
@@ -75,8 +81,8 @@ const BoardList = ({ onBoardSelect, refreshTrigger, onBoardDeleted }) => {
                   {board.title}
                 </button>
                 <div className="absolute top-2 right-2 flex gap-2 text-sm">
-                  <button onClick={() => startEditing(board)} className="text-blue-600 hover:underline">Edit</button>
-                  <button onClick={() => handleDelete(board._id)} className="text-red-600 hover:underline">Delete</button>
+                  <button onClick={() => startEditing(board)} className="text-black border border-gray-500 px-[2px] py-[2px] bg-gray-100 hover:underline">Edit</button>
+                  <button onClick={() => handleDelete(board._id)} className="text-black border border-gray-500 px-[2px] py-[2px] bg-gray-100 hover:underline">Delete</button>
                 </div>
               </>
             )}

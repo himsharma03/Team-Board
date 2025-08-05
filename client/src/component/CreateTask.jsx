@@ -6,10 +6,12 @@ const CreateTask = ({ boardId, onTaskCreated }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
  
+console.log("boardId:", boardId);
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting task...");
     if (!title.trim()) return;
 
     try {
@@ -17,6 +19,7 @@ const CreateTask = ({ boardId, onTaskCreated }) => {
         title,
         description,
         boardId,
+        status: 'todo',
       });
       console.log('Sending task:', { title, description, boardId });
 
@@ -46,7 +49,7 @@ const CreateTask = ({ boardId, onTaskCreated }) => {
         className="border px-2 py-1 rounded"
         rows="3"
       />
-      <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded self-start">
+      <button type="submit" className="bg-red-100 hover:bg-red-500 text-white px-4 py-1 rounded self-start">
         Add Task
       </button>
     </form>

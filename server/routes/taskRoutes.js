@@ -8,9 +8,9 @@ const {
   editTask
 } = require('../controllers/taskController');
 
-router.get('/:boardId', getTasksByBoard); // Get all tasks by board
-router.post('/', createTask);             // Create a new task
-router.delete('/:id', deleteTask);        // Delete task by ID
-router.put('/:id', editTask);             // Edit task by ID
+router.get('/board/:boardId', getTasksByBoard);
+router.post('/', createTask);             
+router.delete('/:id', deleteTask);       
+router.put('/:id', editTask);             
 
 module.exports = router;

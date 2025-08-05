@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 const API = import.meta.env.VITE_API_URL;
 
@@ -14,28 +14,24 @@ const CreateBoard = ({ onBoardCreated }) => {
       setTitle('');
       onBoardCreated();
     } catch (err) {
-      console.error('Error creating board:', err);
+      console.error('Failed to create board:', err);
     }
   };
+return (
+  <form onSubmit={handleSubmit} className="flex flex-col gap-2 mb-4">
+    <input
+      type="text"
+      placeholder="New Board Name"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+      className="border px-2 py-1 rounded w-full"
+    />
+    <button type="submit" className="w-[80px] ml-[50px] bg-blue-500 text-white px-4 py-1 rounded mt-5">
+      Create
+    </button>
+  </form>
+);
 
-  return (
-    <form onSubmit={handleSubmit} className="mt-6">
-      <h3 className="text-lg font-semibold text-blue-500 mb-2">Create New Board</h3>
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Enter board title"
-        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-      />
-      <button
-        type="submit"
-        className="mt-3 w-full bg-purple-200 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition"
-      >
-        Create Board
-      </button>
-    </form>
-  );
 };
 
 export default CreateBoard;

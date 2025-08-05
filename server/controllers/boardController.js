@@ -1,5 +1,6 @@
 const Board = require('../models/Board');
-
+const Task = require('../models/Task'); 
+const mongoose = require('mongoose');   
 
 const getBoards = async (req, res) => {
   try {
@@ -13,7 +14,7 @@ const getBoards = async (req, res) => {
 const createBoard = async (req, res) => {
   const { title } = req.body;
 
-  if (!title)   {
+  if (!title) {
     return res.status(400).json({ message: 'Title is required' });
   }
 
@@ -26,10 +27,12 @@ const createBoard = async (req, res) => {
   }
 };
 
-const Task = require('../models/Task');
-
 const deleteBoard = async (req, res) => {
   const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid board ID' });
+  }
 
   try {
     const delBoard = await Board.findByIdAndDelete(id);
@@ -45,10 +48,13 @@ const deleteBoard = async (req, res) => {
   }
 };
 
-
 const editBoard = async (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid board ID' });
+  }
 
   if (!title) {
     return res.status(400).json({ message: 'Title is required to update the board' });
@@ -58,7 +64,7 @@ const editBoard = async (req, res) => {
     const updatedBoard = await Board.findByIdAndUpdate(
       id,
       { title },
-      { new: true } 
+      { new: true }
     );
 
     if (!updatedBoard) {
