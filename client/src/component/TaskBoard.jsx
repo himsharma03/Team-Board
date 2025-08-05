@@ -22,17 +22,27 @@ const TaskBoard = ({ boardId, refreshTask }) => {
     if (boardId) fetchTasks();
   }, [boardId, refreshTask]);
 
-  const onDragEnd = async ({ destination, source, draggableId }) => {
-    if (!destination || destination.droppableId === source.droppableId) return;
-    try {
-      await axios.put(`${API}/api/tasks/${draggableId}`, {
-        status: destination.droppableId,
-      });
-      fetchTasks();
-    } catch (err) {
-      console.error('Drag update failed:', err);
-    }
-  };
+ const onDragEnd = async ({ destination, source, draggableId }) => {
+  if (!destination || destination.droppableId === source.droppableId) return;
+
+  setTasks((prevTasks) =>
+    prevTasks.map((task) =>
+      task._id === draggableId
+        ? { ...task, status: destination.droppableId }
+        : task
+    )
+  );
+
+  try {
+    await axios.put(`${API}/api/tasks/${draggableId}`, {
+      status: destination.droppableId,
+    });
+  } catch (err) {
+    console.error('Drag update failed:', err);
+    fetchTasks(); 
+  }
+};
+
 
   const handleDelete = async (taskId) => {
     try {

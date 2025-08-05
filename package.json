@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "install": "cd server && npm install && cd ../client && npm install", 
+    "install": "cd server && npm install && cd ../client && npm install",
     "dev": "concurrently \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
     "build": "npm run build --prefix client",
     "start": "node server/index.js"
   },
   "dependencies": {
     "concurrently": "^9.2.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "react-loader-spinner": "^6.1.6"
   }
 }
