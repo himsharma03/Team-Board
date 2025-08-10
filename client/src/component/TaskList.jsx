@@ -10,7 +10,7 @@ const TaskList = ({ boardId, refreshTrigger, darkMode }) => {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(`${API}/api/tasks/${boardId}`);
+      const res = await axios.get(`${API}/api/tasks/board/${boardId}`);
       setTasks(res.data);
     } catch (err) {
       console.error('Error fetching tasks:', err);
