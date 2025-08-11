@@ -7,8 +7,9 @@ const API = import.meta.env.VITE_API_URL;
 const Notes = ({ boardId }) => {
   const [notes, setNotes] = useState([]);
   const [newNoteContent, setNewNoteContent] = useState('');
+  const [editingNoteId, setEditingNoteId] = useState(null); // Track which note is being typed in
   const socketRef = useRef(null);
-  const typingTimeouts = useRef({});
+  const typingTimeouts = useRef({}); // Store debounce timers
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -22,7 +23,6 @@ const Notes = ({ boardId }) => {
 
     fetchNotes();
 
-    // Connect socket
     socketRef.current = io(API);
     const socket = socketRef.current;
 
@@ -34,7 +34,11 @@ const Notes = ({ boardId }) => {
 
     socket.on('note-updated', (updatedNote) => {
       setNotes(prevNotes =>
-        prevNotes.map(note => (note._id === updatedNote._id ? updatedNote : note))
+        prevNotes.map(note =>
+          note._id === updatedNote._id
+            ? (updatedNote._id === editingNoteId ? note : updatedNote) // Skip update if editing
+            : note
+        )
       );
     });
 
@@ -46,7 +50,7 @@ const Notes = ({ boardId }) => {
       socket.emit('leaveBoardNotes', boardId);
       socket.disconnect();
     };
-  }, [boardId]);
+  }, [boardId, editingNoteId]);
 
   const handleCreateNote = async (e) => {
     e.preventDefault();
@@ -107,17 +111,17 @@ const Notes = ({ boardId }) => {
               value={note.content}
               onChange={(e) => {
                 const value = e.target.value;
+                setEditingNoteId(note._id); 
 
-                // Update locally immediately
                 setNotes(prev =>
                   prev.map(n => n._id === note._id ? { ...n, content: value } : n)
                 );
 
-                // Debounce API update
                 clearTimeout(typingTimeouts.current[note._id]);
                 typingTimeouts.current[note._id] = setTimeout(() => {
                   handleUpdateNote(note._id, value);
-                }, 500); // waits 0.5s after last key press
+                  setEditingNoteId(null); 
+                }, 500);
               }}
               className="flex-grow bg-transparent border-none focus:outline-none resize-none dark:text-gray-300"
               rows="2"
