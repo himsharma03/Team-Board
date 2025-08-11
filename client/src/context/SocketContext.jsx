@@ -8,7 +8,7 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const s = io(import.meta.env.VITE_API_URL); // connect to backend
+    const s = io(import.meta.env.VITE_API_URL); 
     setSocket(s);
 
     return () => {

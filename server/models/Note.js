@@ -1,4 +1,3 @@
-// new file: models/Note.js
 const mongoose = require('mongoose');
 
 const noteSchema = new mongoose.Schema({
@@ -15,7 +14,6 @@ const noteSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  // Add other fields as needed, like `author` or `timestamp`
 }, { timestamps: true });
 
 module.exports = mongoose.model('Note', noteSchema);

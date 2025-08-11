@@ -8,7 +8,7 @@ const { Server } = require('socket.io');
 
 const boardRoutes = require('./routes/boardRoutes');
 const taskRoutes = require('./routes/taskRoutes');
-const noteRoutes = require('./routes/noteRoutes'); // ✅ import here
+const noteRoutes = require('./routes/noteRoutes');
 const notesSocketHandler = require('./socket/notes');
 
 const app = express();
@@ -30,11 +30,10 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log('DB Error:', err));
 
-// ✅ Mount routes AFTER middleware
 app.use('/api/boards', boardRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use((req, res, next) => {
-  req.io = io; // attach io to every request
+  req.io = io; 
   next();
 });
 app.use('/api/notes', noteRoutes);
