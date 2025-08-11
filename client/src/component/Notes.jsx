@@ -7,9 +7,9 @@ const API = import.meta.env.VITE_API_URL;
 const Notes = ({ boardId }) => {
   const [notes, setNotes] = useState([]);
   const [newNoteContent, setNewNoteContent] = useState('');
-  const [editingNoteId, setEditingNoteId] = useState(null); // Track which note is being typed in
+  const [editingNoteId, setEditingNoteId] = useState(null);
   const socketRef = useRef(null);
-  const typingTimeouts = useRef({}); // Store debounce timers
+  const typingTimeouts = useRef({});
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -36,7 +36,7 @@ const Notes = ({ boardId }) => {
       setNotes(prevNotes =>
         prevNotes.map(note =>
           note._id === updatedNote._id
-            ? (updatedNote._id === editingNoteId ? note : updatedNote) // Skip update if editing
+            ? (updatedNote._id === editingNoteId ? note : updatedNote) 
             : note
         )
       );
