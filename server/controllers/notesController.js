@@ -1,4 +1,3 @@
-// new file: controllers/notesController.js
 const Note = require('../models/Note');
 const mongoose = require('mongoose');
 
@@ -24,7 +23,6 @@ const createNote = async (req, res) => {
     const newNote = new Note({ boardId, content });
     await newNote.save();
 
-    // Emit to all clients in the same board room
     req.io.to(`notes:${boardId}`).emit('note-created', newNote);
 
     res.status(201).json(newNote);
@@ -67,10 +65,6 @@ const deleteNote = async (req, res) => {
     res.status(500).json({ message: 'Failed to delete note', error: err.message });
   }
 };
-
-
-// You can add more functions for pinNote, searchNotes, etc.
-// based on what's defined in your noteRoutes.js
 
 module.exports = {
   getNotesByBoard,
